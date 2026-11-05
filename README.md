@@ -52,7 +52,7 @@ Use the following technologies throughout the project.
 |---|---|---|
 | Frontend | React + TypeScript | User interface |
 | UI Library | Material UI | UI components |
-| Main Backend | Laravel | Business logic and REST APIs |
+| Main Backend | Express.js + TypeScript | Business logic and REST APIs |
 | AI Backend | Python + FastAPI | AI processing service |
 | Main Database | PostgreSQL | Application data |
 | Vector Database | PostgreSQL + pgvector | Vector storage and similarity search |
@@ -62,9 +62,9 @@ Use the following technologies throughout the project.
 | Document Processing | PyMuPDF | PDF text extraction |
 | DOCX Processing | python-docx | Word document processing |
 | OCR | Tesseract | Scanned document processing |
-| Background Jobs | Laravel Queues + Redis | Asynchronous processing |
+| Background Jobs | BullMQ + Redis | Asynchronous processing |
 | AI Service Jobs | Python background tasks when needed | Long-running AI operations |
-| Report Generation | PHPWord | Generate Word reports |
+| Report Generation | docx | Generate Word reports |
 | AI Evaluation | RAGAS | Evaluate RAG performance |
 | Version Control | Git | Source control |
 
@@ -73,7 +73,7 @@ Use the following technologies throughout the project.
 1. Use PostgreSQL with pgvector instead of introducing Pinecone or another vector database.
 2. Use OpenAI API initially.
 3. Use Python for the AI service and LangChain.
-4. Keep Laravel responsible for business logic and application APIs.
+4. Keep Express.js responsible for business logic and application APIs.
 5. Keep AI processing inside the Python service.
 6. Use LangChain Python, not LangChain.js, for this project.
 7. Do not introduce additional databases without discussing the reasons.
@@ -82,15 +82,16 @@ Use the following technologies throughout the project.
 
 ### Why use two backends?
 
-Laravel and Python have different responsibilities.
+Express.js and Python have different responsibilities.
 
-**Laravel:**
+**Express.js:**
 - Client management.
 - Case management.
 - Document metadata.
 - Application database operations.
 - Frontend-facing REST APIs.
 - Business logic.
+- Background jobs for application workflows.
 
 **Python + FastAPI:**
 - Document processing.
@@ -101,7 +102,7 @@ Laravel and Python have different responsibilities.
 - AI extraction.
 - AI evaluation.
 
-React communicates with Laravel. Laravel communicates with the Python AI service when AI processing is required.
+React communicates with Express.js. Express.js communicates with the Python AI service when AI processing is required.
 
 # 3. Application Modules
 
@@ -234,7 +235,7 @@ Understand the architecture and prepare the development environment.
 ### Learn
 
 - React architecture.
-- Laravel architecture.
+- Express.js architecture.
 - Python fundamentals for AI development.
 - FastAPI fundamentals.
 - REST API communication.
@@ -245,11 +246,11 @@ Understand the architecture and prepare the development environment.
 
 - Create the project repository.
 - Initialize the React frontend.
-- Initialize the Laravel backend.
+- Initialize the Express.js backend.
 - Initialize the Python FastAPI service.
 - Configure PostgreSQL.
 - Configure environment variables.
-- Establish communication between Laravel and FastAPI.
+- Establish communication between Express.js and FastAPI.
 - Create initial architecture documentation.
 
 ### Expected architecture
@@ -258,7 +259,7 @@ Understand the architecture and prepare the development environment.
                  React Frontend
                        |
                        v
-                 Laravel Backend
+                 Express Backend
                        |
              +---------+---------+
              |                   |
@@ -272,10 +273,10 @@ Understand the architecture and prepare the development environment.
 ### Acceptance criteria
 
 - React application runs.
-- Laravel application runs.
+- Express.js application runs.
 - FastAPI application runs.
 - PostgreSQL connection works.
-- Laravel can communicate with FastAPI.
+- Express.js can communicate with FastAPI.
 
 ---
 
@@ -287,7 +288,7 @@ Build the basic application without AI.
 
 ### Learn
 
-- Laravel REST APIs.
+- Express.js REST APIs.
 - React Query.
 - PostgreSQL relationships.
 - Database migrations.
@@ -356,7 +357,7 @@ Send a legal document's extracted text to OpenAI and request a summary.
 
 ### Acceptance criteria
 
-- Laravel can request a summary through FastAPI.
+- Express.js can request a summary through FastAPI.
 - FastAPI can communicate with OpenAI.
 - The generated summary appears in React.
 - Token usage is recorded.
@@ -829,8 +830,8 @@ Generate structured legal reports.
 
 ### Technologies
 
-- Laravel.
-- PHPWord.
+- Express.js.
+- docx.
 - OpenAI.
 - LangChain where useful.
 
@@ -897,7 +898,7 @@ The target architecture is:
                    React Frontend
                          |
                          v
-                   Laravel Backend
+                   Express Backend
                          |
               +----------+----------+
               |                     |
@@ -916,7 +917,7 @@ The target architecture is:
                     AI Responses
                          |
                          v
-                    Laravel Backend
+                    Express Backend
                          |
                          v
                     React Frontend
@@ -928,7 +929,7 @@ The document processing workflow:
 PDF / DOCX Upload
        |
        v
-Laravel File Storage
+Express File Storage
        |
        v
 Python Processing Service
@@ -955,7 +956,7 @@ User Question
 React Frontend
        |
        v
-Laravel API
+Express API
        |
        v
 Python FastAPI
@@ -1023,15 +1024,18 @@ legalmind-ai/
 │       └── types/
 │
 ├── backend/
-│   ├── app/
-│   │   ├── Http/
-│   │   ├── Models/
-│   │   ├── Services/
-│   │   └── Jobs/
+│   ├── src/
+│   │   ├── routes/
+│   │   ├── controllers/
+│   │   ├── services/
+│   │   ├── jobs/
+│   │   ├── middleware/
+│   │   └── server.ts
 │   ├── database/
 │   │   ├── migrations/
 │   │   └── seeders/
-│   └── routes/
+│   ├── package.json
+│   └── tsconfig.json
 │
 ├── ai-service/
 │   ├── app/
@@ -1129,7 +1133,7 @@ Whenever implementing an AI feature, explain:
 
 - Write maintainable code.
 - Use clear naming conventions.
-- Follow Laravel and Python best practices.
+- Follow Express.js and Python best practices.
 - Use Pydantic for Python data validation.
 - Write appropriate unit and integration tests.
 - Handle API errors.
@@ -1151,7 +1155,9 @@ Use official documentation whenever possible.
 | FastAPI | https://fastapi.tiangolo.com/ |
 | PostgreSQL | https://www.postgresql.org/docs/ |
 | pgvector | https://github.com/pgvector/pgvector |
-| Laravel | https://laravel.com/docs |
+| Express.js | https://expressjs.com/ |
+| BullMQ | https://docs.bullmq.io/ |
+| docx | https://docx.js.org/ |
 | React | https://react.dev/ |
 | PyMuPDF | https://pymupdf.readthedocs.io/ |
 | Tesseract | https://github.com/tesseract-ocr/tesseract |
@@ -1175,7 +1181,7 @@ Do not use confidential client documents.
 
 At the end of the project, I should be able to:
 
-- Build a full-stack application using React and Laravel.
+- Build a full-stack application using React and Express.js.
 - Build an AI service using Python and FastAPI.
 - Integrate OpenAI APIs.
 - Extract text from PDF and DOCX files.
@@ -1207,9 +1213,9 @@ Before writing any code:
 
 1. Analyze the complete project requirements.
 2. Explain the proposed architecture.
-3. Explain the responsibilities of React, Laravel, PostgreSQL and Python FastAPI.
+3. Explain the responsibilities of React, Express.js, PostgreSQL and Python FastAPI.
 4. Explain why we are using LangChain Python.
-5. Explain how Laravel and Python will communicate.
+5. Explain how Express.js and Python will communicate.
 6. Identify development prerequisites.
 7. Propose the initial folder structure.
 8. Identify architectural decisions that need to be made.
