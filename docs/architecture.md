@@ -1,6 +1,6 @@
 # LegalMind architecture
 
-Phase 0 proves the process boundaries. It does not implement clients, documents, or AI.
+Phase 0 proves the process boundaries. Phase 1, documented in [phase-1.md](phase-1.md), adds sign-in, internal users, clients, cases, and document uploads. It still does not implement AI.
 
 ```text
 React (Vite, port 5173)
@@ -20,12 +20,12 @@ The browser talks only to Express. FastAPI has no CORS middleware because the UI
 
 | Piece | Owns now | Owns later |
 |---|---|---|
-| React | Status page | Clients, cases, documents, chat |
-| Express | Health API, Postgres access, calls to FastAPI | Business rules and the public REST API |
-| PostgreSQL | An empty `legalmind` database | Application tables, then embeddings |
+| React | Sign-in, clients, cases, documents, and the status page | Chat and AI results |
+| Express | Health, auth, and the public REST API | Calls into FastAPI for AI work |
+| PostgreSQL | Users, clients, cases, and document metadata | Embeddings |
 | FastAPI | `GET /health` | Document processing, embeddings, RAG, LangChain |
 
-One PostgreSQL database is shared by the project. Express is the only process that connects to it in Phase 0. The vector extension is not created yet.
+One PostgreSQL database is shared by the project. Express is the only process that connects to it. The vector extension is not created yet. See [phase-1.md](phase-1.md) for the tables and login flow.
 
 ## Run Phase 0
 

@@ -8,3 +8,5 @@ __pycache__/
 .vite/
 *.tsbuildinfo
 .DS_Store
+backend/uploads/*
+!backend/uploads/.gitkeep
